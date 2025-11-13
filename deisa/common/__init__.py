@@ -27,4 +27,4 @@
 # POSSIBILITY OF SUCH DAMAGE.
 # =============================================================================
 
-from deisa.common.interface import *
+from .interface import *
