@@ -50,7 +50,7 @@ setup(name='deisa-common',
       author_email='bmartin@cea.fr',
       python_requires='>=3.8',
       keywords='deisa in-situ',
-      packages=find_packages(include=['deisa', 'deisa.*', 'deisa.common.*']),
+      packages=['deisa.common'],
       classifiers=[
           "Programming Language :: Python :: 3.8",
           "Operating System :: OS Independent",
