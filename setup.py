@@ -51,12 +51,8 @@ setup(name='deisa-common',
       python_requires='>=3.8',
       keywords='deisa in-situ',
       packages=['deisa-common'],
-      install_requires=[],
-      tests_require=[],
-      test_suite='test',
       classifiers=[
           "Programming Language :: Python :: 3.8",
-          "License :: OSI Approved :: MIT License",
           "Operating System :: OS Independent",
           "Development Status :: 3 - Alpha"
       ]
