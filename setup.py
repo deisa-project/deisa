@@ -27,7 +27,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 # =============================================================================
 
-from setuptools import setup, find_packages
+from setuptools import setup, find_namespace_packages
 
 
 def readme():
@@ -50,7 +50,7 @@ setup(name='deisa-common',
       author_email='bmartin@cea.fr',
       python_requires='>=3.8',
       keywords='deisa in-situ',
-      packages=['deisa.common'],
+      packages=find_namespace_packages(where='.', include=['deisa.common']),
       classifiers=[
           "Programming Language :: Python :: 3.8",
           "Operating System :: OS Independent",
