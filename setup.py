@@ -27,7 +27,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 # =============================================================================
 
-from setuptools import setup, find_packages
+from setuptools import setup, find_namespace_packages
 
 
 def readme():
@@ -50,9 +50,8 @@ setup(name='deisa-common',
       author_email='bmartin@cea.fr',
       python_requires='>=3.8',
       keywords='deisa in-situ',
-      # packages=find_namespace_packages(where='src/', include=['deisa.common']),
       package_dir={'': 'src'},
-      packages=find_packages(where="src"),
+      packages=find_namespace_packages(where='src', include=['deisa.common']),
       extras_require={
           "test": [
               "pytest",
