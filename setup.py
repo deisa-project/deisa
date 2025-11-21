@@ -53,6 +53,14 @@ setup(name='deisa-common',
       # packages=find_namespace_packages(where='src/', include=['deisa.common']),
       package_dir={'': 'src'},
       packages=find_packages(where="src"),
+      extras_require={
+          "test": [
+              "pytest",
+              "dask",
+              "distributed",
+              "deisa @ git+https://github.com/deisa-project/deisa@main"
+          ]
+      },
       classifiers=[
           "Programming Language :: Python :: 3.8",
           "Operating System :: OS Independent",
