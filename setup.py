@@ -57,6 +57,7 @@ setup(name='deisa-common',
           "test": [
               "pytest",
               "dask",
+              "numpy",
               "distributed",
               "deisa @ git+https://github.com/deisa-project/deisa@main"
           ]
