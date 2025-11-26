@@ -35,16 +35,16 @@ def readme():
         return f.read()
 
 
-setup(name='deisa-common',
-      version='0.1.0',
-      description='Deisa common',
+setup(name='deisa',
+      version='0.2.0',
+      description='Dask enabled in-situ analysis',
       long_description=readme(),
       long_description_content_type='text/markdown',
       license='MIT',
-      url='https://github.com/deisa-project/common',
+      url='https://github.com/deisa-project/deisa',
       project_urls={
-          'Bug Reports': 'https://github.com/deisa-project/common/issues',
-          'Source': 'https://github.com/deisa-project/common',
+          'Bug Reports': 'https://github.com/deisa-project/deisa/issues',
+          'Source': 'https://github.com/deisa-project/deisa',
       },
       author='Benoît Martin',
       author_email='bmartin@cea.fr',
@@ -56,9 +56,9 @@ setup(name='deisa-common',
           "test": [
               "pytest",
               "dask",
-              "numpy",
               "distributed",
-              "deisa @ git+https://github.com/deisa-project/deisa@main"
+              "numpy",
+              "deisa-dask @ git+https://github.com/deisa-project/deisa-dask@main"
           ]
       },
       classifiers=[
