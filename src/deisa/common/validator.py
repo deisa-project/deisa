@@ -27,9 +27,11 @@
 # POSSIBILITY OF SUCH DAMAGE.
 # =============================================================================
 
-from typing import Iterable, Dict, Any
+from typing import Iterable, Dict, Any, Union
 
 from distributed import Client
+
+Connection = Union[Client]  # TODO: add Ray connection type
 
 
 def validate_system_metadata(system_metadata: Dict[str, Any]) -> Dict[str, Any]:
@@ -38,7 +40,7 @@ def validate_system_metadata(system_metadata: Dict[str, Any]) -> Dict[str, Any]:
 
     Requirements:
       - system_metadata must be a dict
-      - must contain key 'connection' whose value is an instance of Client
+      - must contain key 'connection' whose value is an instance of Connection
       - must contain key 'nb_bridges' whose value is an int
 
     Raises:
@@ -48,8 +50,8 @@ def validate_system_metadata(system_metadata: Dict[str, Any]) -> Dict[str, Any]:
     if not isinstance(system_metadata, dict):
         raise TypeError("system_metadata must be a dict")
     # Check presence and type for 'connection'
-    if 'connection' not in system_metadata or not isinstance(system_metadata['connection'], Client):
-        raise ValueError("system_metadata must contain 'connection' of type Client")
+    if 'connection' not in system_metadata or not isinstance(system_metadata['connection'], Connection):
+        raise ValueError("system_metadata must contain 'connection' of type Connection")
     # Check presence and type for 'nb_bridges'
     if 'nb_bridges' not in system_metadata or not isinstance(system_metadata['nb_bridges'], int):
         raise ValueError("system_metadata must contain 'nb_bridges' of type int")

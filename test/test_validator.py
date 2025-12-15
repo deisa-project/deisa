@@ -28,38 +28,42 @@
 # =============================================================================
 
 import pytest
-from distributed import Client
+
+from common import dask_env, ray_env
 
 from deisa.common import validate_system_metadata, validate_arrays_metadata
 
 
+@pytest.mark.parametrize("env_setup", ["dask_env", "ray_env"])
 class TestSystemMetadata:
-    def test_valid_metadata(self):
-        conn = Client()
+    def test_valid_metadata(self, request, env_setup):
+        conn, _ = request.getfixturevalue(env_setup)
         metadata = {"connection": conn, "nb_bridges": 3}
         assert validate_system_metadata(metadata) == metadata
 
-    def test_not_a_dict(self):
+    def test_not_a_dict(self, request, env_setup):
         with pytest.raises(TypeError):
             validate_system_metadata("not a dict")
 
-    def test_missing_connection_key(self):
+    def test_missing_connection_key(self, request, env_setup):
         metadata = {"nb_bridges": 1}
         with pytest.raises(ValueError):
             validate_system_metadata(metadata)
 
-    def test_wrong_connection_type(self):
+    def test_wrong_connection_type(self, request, env_setup):
         metadata = {"connection": 123, "nb_bridges": 1}
         with pytest.raises(ValueError):
             validate_system_metadata(metadata)
 
-    def test_missing_nb_bridges_key(self):
-        metadata = {"connection": Client()}
+    def test_missing_nb_bridges_key(self, request, env_setup):
+        conn, _ = request.getfixturevalue(env_setup)
+        metadata = {"connection": conn}
         with pytest.raises(ValueError):
             validate_system_metadata(metadata)
 
-    def test_wrong_nb_bridges_type(self):
-        metadata = {"connection": Client(), "nb_bridges": "not-an-int"}
+    def test_wrong_nb_bridges_type(self, request, env_setup):
+        conn, _ = request.getfixturevalue(env_setup)
+        metadata = {"connection": conn, "nb_bridges": "not-an-int"}
         with pytest.raises(ValueError):
             validate_system_metadata(metadata)
 
