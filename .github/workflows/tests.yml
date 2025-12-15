@@ -1,9 +1,9 @@
 name: Python nightly unit tests
 
 on:
-  schedule:
-    - cron: '0 2 * * *' # run at 2 AM
-  # This can be used to allow manually triggering nightlies from the web interface
+  push:
+    branches: [ main ]
+  pull_request:
   workflow_dispatch:
 
 jobs:
@@ -27,4 +27,4 @@ jobs:
           python -m pip install .[test]
       - name: Test with pytest
         run: |
-          pytest test/test_api.py
+          pytest

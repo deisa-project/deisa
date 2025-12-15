@@ -58,7 +58,8 @@ setup(name='deisa',
               "dask",
               "distributed",
               "numpy",
-              "deisa-dask @ git+https://github.com/deisa-project/deisa-dask@main"
+              "deisa-dask @ git+https://github.com/deisa-project/deisa-dask@main",
+              # "deisa-ray @ git+https://github.com/deisa-project/deisa-ray@main",  #TODO
           ]
       },
       classifiers=[
