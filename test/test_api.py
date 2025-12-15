@@ -27,14 +27,13 @@
 # POSSIBILITY OF SUCH DAMAGE.
 # =============================================================================
 import pytest
-from deisa.dask import Deisa, Bridge
-from distributed import LocalCluster, Client, Variable
 
 from deisa.common import DeisaInterface, BridgeInterface
 
 
 @pytest.fixture
 def dask_env():
+    from distributed import LocalCluster, Client, Variable
     cluster = LocalCluster(n_workers=1, threads_per_worker=1, processes=False)
     client = Client(cluster)
     Variable("workers", client=client).set([w_addr for w_addr in client.scheduler_info()["workers"].keys()])
@@ -46,6 +45,7 @@ def dask_env():
 
 @pytest.fixture
 def ray_env():  # TODO: replace dask with ray
+    from distributed import LocalCluster, Client, Variable
     cluster = LocalCluster(n_workers=1, threads_per_worker=1, processes=False)
     client = Client(cluster)
     Variable("workers", client=client).set([w_addr for w_addr in client.scheduler_info()["workers"].keys()])
@@ -58,17 +58,22 @@ def ray_env():  # TODO: replace dask with ray
 @pytest.mark.parametrize("env_setup", ["dask_env", "ray_env"])
 def test_deisa_api(request, env_setup):
     client, cluster = request.getfixturevalue(env_setup)
-    deisa: DeisaInterface = Deisa(client, mpi_comm_size=1, nb_workers=1)
+    deisa: DeisaInterface = Deisa(get_connection_info=lambda: client, wait_for_go=False)
 
     assert hasattr(deisa, 'close') and callable(deisa.close)
     assert hasattr(deisa, 'get_array') and callable(deisa.get_array)
     assert hasattr(deisa, 'register_sliding_window_callback') and callable(deisa.register_sliding_window_callback)
     assert hasattr(deisa, 'unregister_sliding_window_callback') and callable(deisa.unregister_sliding_window_callback)
+    assert hasattr(deisa, "set") and callable(deisa.set)
+    assert hasattr(deisa, "delete") and callable(deisa.delete)
 
 
 @pytest.mark.parametrize("env_setup", ["dask_env", "ray_env"])
 def test_bridge_api(request, env_setup):
     client, cluster = request.getfixturevalue(env_setup)
-    bridge: BridgeInterface = Bridge(client, mpi_comm_size=1, mpi_rank=0, arrays_metadata={})
+    bridge: BridgeInterface = Bridge(id=0,
+                                     arrays_metadata={},
+                                     system_metadata={'connection': client, 'nb_bridges': 1},
+                                     wait_for_go=False)
 
-    assert hasattr(bridge, 'publish_data') and callable(bridge.publish_data)
+    assert hasattr(bridge, 'send') and callable(bridge.send)
