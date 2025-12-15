@@ -35,6 +35,9 @@ from deisa.common import DeisaInterface, BridgeInterface
 
 @pytest.mark.parametrize("env_setup", ["dask_env", "ray_env"])
 def test_deisa_api(request, env_setup):
+    if env_setup == "dask_env":
+        from deisa.dask import Deisa
+
     client, cluster = request.getfixturevalue(env_setup)
     deisa: DeisaInterface = Deisa(get_connection_info=lambda: client, wait_for_go=False)
 
@@ -48,6 +51,9 @@ def test_deisa_api(request, env_setup):
 
 @pytest.mark.parametrize("env_setup", ["dask_env", "ray_env"])
 def test_bridge_api(request, env_setup):
+    if env_setup == "dask_env":
+        from deisa.dask import Bridge
+
     client, cluster = request.getfixturevalue(env_setup)
     bridge: BridgeInterface = Bridge(id=0,
                                      arrays_metadata={},
