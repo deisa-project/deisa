@@ -1,4 +1,4 @@
-name: Python nightly unit tests
+name: Python unit tests
 
 on:
   push:
