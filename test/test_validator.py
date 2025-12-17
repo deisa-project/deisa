@@ -30,11 +30,10 @@
 import pytest
 
 from common import dask_env, ray_env
-
 from deisa.common import validate_system_metadata, validate_arrays_metadata
 
 
-@pytest.mark.parametrize("env_setup", ["dask_env", "ray_env"])
+@pytest.mark.parametrize("env_setup", [dask_env.__name__, ray_env.__name__])
 class TestSystemMetadata:
     def test_valid_metadata(self, request, env_setup):
         conn, _ = request.getfixturevalue(env_setup)

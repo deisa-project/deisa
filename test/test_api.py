@@ -26,20 +26,24 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 # =============================================================================
+import importlib
+
 import pytest
 
 from common import dask_env, ray_env
-
 from deisa.common import IDeisa, IBridge
 
+module_name = {
+    dask_env.__name__: "deisa.dask",
+    ray_env.__name__: "deisa.dask",  # TODO change to deisa.ray
+}
 
-@pytest.mark.parametrize("env_setup", ["dask_env", "ray_env"])
+
+@pytest.mark.parametrize("env_setup", [dask_env.__name__, ray_env.__name__])
 def test_deisa_api(request, env_setup):
-    if env_setup == "dask_env":
-        from deisa.dask import Deisa
-
     client, cluster = request.getfixturevalue(env_setup)
-    deisa: IDeisa = Deisa(get_connection_info=lambda: client, wait_for_go=False)
+    module = importlib.import_module(module_name[env_setup])
+    deisa: IDeisa = module.Deisa(get_connection_info=lambda: client, wait_for_go=False)
 
     assert hasattr(deisa, 'close') and callable(deisa.close)
     assert hasattr(deisa, 'get_array') and callable(deisa.get_array)
@@ -49,15 +53,14 @@ def test_deisa_api(request, env_setup):
     assert hasattr(deisa, "delete") and callable(deisa.delete)
 
 
-@pytest.mark.parametrize("env_setup", ["dask_env", "ray_env"])
+@pytest.mark.parametrize("env_setup", [dask_env.__name__, ray_env.__name__])
 def test_bridge_api(request, env_setup):
-    if env_setup == "dask_env":
-        from deisa.dask import Bridge
-
     client, cluster = request.getfixturevalue(env_setup)
-    bridge: IBridge = Bridge(id=0,
-                             arrays_metadata={},
-                             system_metadata={'connection': client, 'nb_bridges': 1},
-                             wait_for_go=False)
+    module = importlib.import_module(module_name[env_setup])
+    bridge: IBridge = module.Bridge(id=0,
+                                    arrays_metadata={},
+                                    system_metadata={'connection': client, 'nb_bridges': 1},
+                                    wait_for_go=False)
 
     assert hasattr(bridge, 'send') and callable(bridge.send)
+    assert hasattr(bridge, 'get') and callable(bridge.get)
