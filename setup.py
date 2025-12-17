@@ -55,6 +55,7 @@ setup(name='deisa',
       extras_require={
           "test": [
               "pytest",
+              "mypy",
               "dask",
               "distributed",
               "numpy",
