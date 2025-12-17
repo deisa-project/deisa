@@ -30,7 +30,7 @@ import pytest
 
 from common import dask_env, ray_env
 
-from deisa.common import DeisaInterface, BridgeInterface
+from deisa.common import IDeisa, IBridge
 
 
 @pytest.mark.parametrize("env_setup", ["dask_env", "ray_env"])
@@ -39,7 +39,7 @@ def test_deisa_api(request, env_setup):
         from deisa.dask import Deisa
 
     client, cluster = request.getfixturevalue(env_setup)
-    deisa: DeisaInterface = Deisa(get_connection_info=lambda: client, wait_for_go=False)
+    deisa: IDeisa = Deisa(get_connection_info=lambda: client, wait_for_go=False)
 
     assert hasattr(deisa, 'close') and callable(deisa.close)
     assert hasattr(deisa, 'get_array') and callable(deisa.get_array)
@@ -55,9 +55,9 @@ def test_bridge_api(request, env_setup):
         from deisa.dask import Bridge
 
     client, cluster = request.getfixturevalue(env_setup)
-    bridge: BridgeInterface = Bridge(id=0,
-                                     arrays_metadata={},
-                                     system_metadata={'connection': client, 'nb_bridges': 1},
-                                     wait_for_go=False)
+    bridge: IBridge = Bridge(id=0,
+                             arrays_metadata={},
+                             system_metadata={'connection': client, 'nb_bridges': 1},
+                             wait_for_go=False)
 
     assert hasattr(bridge, 'send') and callable(bridge.send)
