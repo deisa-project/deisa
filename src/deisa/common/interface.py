@@ -26,58 +26,50 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 # =============================================================================
-from typing import Protocol, Any, Callable, overload, List, Union, Tuple
+from typing import Protocol, Any, Callable, List, Union, Tuple
 
 import dask.array as da
 import numpy as np
 from distributed import Future, Client
 
 
-class SlidingWindowInterface(Protocol):
-    Callback_args = Union[str, Tuple[str], Tuple[str, int]]  # array_name, (array_name, ...), (array_name, window_size)
-
-    class SlidingWindowCallbackInterface(Protocol):
+class SupportsSlidingWindow(Protocol):
+    class Callback(Protocol):
         def __call__(self, *window: List[da.Array], timestep: int) -> None: ...
 
-    class ExceptionHandlerInterface(Protocol):
+    class ExceptionHandler(Protocol):
         def __call__(self, array_name: str, exception: BaseException) -> None: ...
 
-    @overload
-    def register_sliding_window_callback(self, callback: SlidingWindowCallbackInterface,
-                                         array_name: str, *, window_size: int = 1,
-                                         exception_handler: ExceptionHandlerInterface) -> None: ...
+    def register_sliding_window_callback(self,
+                                         callback: Callback,
+                                         array_name: str, window_size: int,
+                                         exception_handler: ExceptionHandler) -> str: ...
 
-    @overload
-    def register_sliding_window_callback(self, callback: SlidingWindowCallbackInterface,
-                                         *callback_args: Callback_args,
-                                         exception_handler: ExceptionHandlerInterface,
-                                         when='AND') -> None: ...
+    def register_sliding_window_callbacks(self,
+                                          callback: Callback,
+                                          *callback_args: Union[str, Tuple[str], Tuple[str, int]],
+                                          exception_handler: ExceptionHandler,
+                                          when: str = 'AND') -> str: ...
 
-    def register_sliding_window_callback(self, callback: SlidingWindowCallbackInterface,
-                                         *callback_args: Callback_args,
-                                         window_size: int = 1,
-                                         exception_handler: ExceptionHandlerInterface,
-                                         when: str = 'AND') -> str: ...
-
-    def unregister_sliding_window_callback(self, *array_names: Callback_args) -> None: ...
+    def unregister_sliding_window_callback(self, *array_names: Union[str, Tuple[str]]) -> None: ...
 
 
-class GetArrayInterface(Protocol):
+class SupportsGetArray(Protocol):
     def get_array(self, array_name: str, timeout=None) -> tuple[da.Array, int]: ...
 
 
-class DeisaInterface(SlidingWindowInterface, GetArrayInterface, Protocol):
+class IDeisa(SupportsSlidingWindow, SupportsGetArray, Protocol):
 
     def __init__(self, get_connection_info: Callable[[], Client], *args, **kwargs): ...
 
-    def set(self, name: str, data: Union[Future, object], chunked=False) -> None: ...
+    def set(self, name: str, data: Union[Future, object], chunked: bool) -> None: ...
 
     def delete(self, key: str) -> None: ...
 
     def close(self) -> None: ...
 
 
-class BridgeInterface(Protocol):
+class IBridge(Protocol):
     def __init__(self, id: int, arrays_metadata: dict[str, dict], system_metadata: dict[str, Any], *args, **kwargs): ...
 
     def send(self, array_name: str, data: np.ndarray, timestep: int, chunked: bool) -> None: ...
