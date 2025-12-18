@@ -28,9 +28,9 @@
 # =============================================================================
 
 import pytest
+from deisa.core import validate_system_metadata, validate_arrays_metadata
 
 from common import dask_env, ray_env
-from deisa.common import validate_system_metadata, validate_arrays_metadata
 
 
 @pytest.mark.parametrize("env_setup", [dask_env.__name__, ray_env.__name__])

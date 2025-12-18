@@ -29,9 +29,9 @@
 import importlib
 
 import pytest
+from deisa.core import IDeisa, IBridge
 
 from common import dask_env, ray_env
-from deisa.common import IDeisa, IBridge
 
 module_name = {
     dask_env.__name__: "deisa.dask",

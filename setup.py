@@ -27,7 +27,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 # =============================================================================
 
-from setuptools import setup, find_namespace_packages
+from setuptools import setup
 
 
 def read_version():
@@ -41,6 +41,26 @@ def readme():
     with open('README.md', 'r') as f:
         return f.read()
 
+
+dask_deps = [
+    "dask",
+    "distributed",
+    "numpy",
+    "deisa-dask==0.3.0",
+]
+
+ray_deps = [
+    "ray",
+    # "deisa-ray==x.y.z",   # TODO
+]
+
+test_deps = [
+    "pytest",
+    "mypi",
+    "deisa-core==0.1.0",
+    *dask_deps,
+    *ray_deps,
+]
 
 setup(name='deisa',
       version=read_version(),
@@ -57,25 +77,11 @@ setup(name='deisa',
       author_email='bmartin@cea.fr',
       python_requires='>=3.8',
       keywords='deisa in-situ',
-      package_dir={'': 'src'},
-      packages=find_namespace_packages(where='src', include=['deisa.common']),
-      install_requires=[],
+      install_requires=[*dask_deps, *ray_deps],  # by default, include all backends,
       extras_require={
-          "test": [
-              "pytest",
-              "dask",
-              "distributed",
-              "numpy",
-          ],
-          "integration_test": [
-              "pytest",
-              "mypy",
-              "dask",
-              "distributed",
-              "numpy",
-              "deisa-dask==0.3.0",
-              # "deisa-ray==x.y.z",  #TODO
-          ]
+          "dask": dask_deps,
+          "ray": ray_deps,
+          "test": test_deps,
       },
       classifiers=[
           "Programming Language :: Python :: 3.8",
