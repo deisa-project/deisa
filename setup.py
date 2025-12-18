@@ -64,7 +64,8 @@ setup(name='deisa',
           "test": [
               "pytest",
               "dask",
-              "distributed"
+              "distributed",
+              "numpy",
           ],
           "integration_test": [
               "pytest",
