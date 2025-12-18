@@ -43,13 +43,13 @@ dask_deps = [
 ]
 
 ray_deps = [
-    # "ray",
+    "ray",
     # "deisa-ray==x.y.z",   # TODO
 ]
 
 test_deps = [
     "pytest",
-    "mypi",
+    "mypy",
     "deisa-core==0.1.0",
     *dask_deps,
     *ray_deps,
