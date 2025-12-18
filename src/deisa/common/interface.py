@@ -26,7 +26,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 # =============================================================================
-from typing import Protocol, Any, Callable, List, Union, Tuple
+from typing import Protocol, Any, Callable, List, Union, Tuple, Literal
 
 import dask.array as da
 import numpy as np
@@ -49,7 +49,7 @@ class SupportsSlidingWindow(Protocol):
                                           callback: Callback,
                                           *callback_args: Union[str, Tuple[str], Tuple[str, int]],
                                           exception_handler: ExceptionHandler,
-                                          when: str = 'AND') -> str: ...
+                                          when: Literal['AND', 'OR'] = 'AND') -> str: ...
 
     def unregister_sliding_window_callback(self, *array_names: Union[str, Tuple[str]]) -> None: ...
 
