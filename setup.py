@@ -30,13 +30,6 @@
 from setuptools import setup
 
 
-def read_version():
-    ns = {}
-    with open("src/deisa/common/__version__.py") as f:
-        exec(f.read(), ns)
-    return ns["__version__"]
-
-
 def readme():
     with open('README.md', 'r') as f:
         return f.read()
@@ -63,7 +56,7 @@ test_deps = [
 ]
 
 setup(name='deisa',
-      version=read_version(),
+      version="0.3.0",
       description='Dask enabled in-situ analysis',
       long_description=readme(),
       long_description_content_type='text/markdown',
