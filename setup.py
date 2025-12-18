@@ -59,15 +59,21 @@ setup(name='deisa',
       keywords='deisa in-situ',
       package_dir={'': 'src'},
       packages=find_namespace_packages(where='src', include=['deisa.common']),
+      install_requires=[],
       extras_require={
           "test": [
+              "pytest",
+              "dask",
+              "distributed"
+          ],
+          "integration_test": [
               "pytest",
               "mypy",
               "dask",
               "distributed",
               "numpy",
-              "deisa-dask @ git+https://github.com/deisa-project/deisa-dask@main",
-              # "deisa-ray @ git+https://github.com/deisa-project/deisa-ray@main",  #TODO
+              "deisa-dask==0.3.0",
+              # "deisa-ray==x.y.z",  #TODO
           ]
       },
       classifiers=[
