@@ -43,7 +43,7 @@ dask_deps = [
 ]
 
 ray_deps = [
-    "ray",
+    # "ray",
     # "deisa-ray==x.y.z",   # TODO
 ]
 
