@@ -27,5 +27,12 @@
 # POSSIBILITY OF SUCH DAMAGE.
 # =============================================================================
 
+from importlib.metadata import version, PackageNotFoundError
+
+try:
+    __version__ = version("deisa")
+except PackageNotFoundError:
+    from .__version__ import __version__  # fallback
+
 from .interface import *
 from .validator import *

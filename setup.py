@@ -30,13 +30,20 @@
 from setuptools import setup, find_namespace_packages
 
 
+def read_version():
+    ns = {}
+    with open("src/deisa/common/__version__.py") as f:
+        exec(f.read(), ns)
+    return ns["__version__"]
+
+
 def readme():
     with open('README.md', 'r') as f:
         return f.read()
 
 
 setup(name='deisa',
-      version='0.2.0',
+      version=read_version(),
       description='Dask enabled in-situ analysis',
       long_description=readme(),
       long_description_content_type='text/markdown',
