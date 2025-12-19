@@ -45,3 +45,5 @@ Backend implementations are expected to pass this test suite unchanged.
 - Issues: https://github.com/deisa-project/deisa/issues
 
 ## Acknowledgement
+As part of the "France 2030" initiative, this work has benefited from a State grant managed by the French National Research Agency (Agence Nationale de la Recherche) attributed to the Exa-DoST project of the NumPEx PEPR program, reference: ANR-22-EXNU-0004.
+
