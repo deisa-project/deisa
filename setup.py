@@ -70,8 +70,9 @@ setup(name='deisa',
       author_email='bmartin@cea.fr',
       python_requires='>=3.8',
       keywords='deisa in-situ',
-      install_requires=[*dask_deps, *ray_deps],  # by default, include all backends,
+      install_requires=[],  # will install for all extras
       extras_require={
+          "all": [*dask_deps, *ray_deps],
           "dask": dask_deps,
           "ray": ray_deps,
           "test": test_deps,
