@@ -27,7 +27,7 @@ test_deps = [
 ]
 
 setup(name='deisa',
-      version="0.3.0",
+      version="0.4.0",
       description='Dask enabled in-situ analysis',
       long_description=readme(),
       long_description_content_type='text/markdown',
