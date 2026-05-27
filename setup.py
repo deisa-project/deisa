@@ -10,20 +10,20 @@ dask_deps = [
     "dask",
     "distributed",
     "numpy",
-    "deisa-dask==0.3.0",
+    "deisa-dask",
 ]
 
 ray_deps = [
     "ray",
-    # "deisa-ray==x.y.z",   # TODO
+    # "deisa-ray",   # TODO
 ]
 
 test_deps = [
     "pytest",
     "mypy",
-    "deisa-core==0.1.0",
+    "deisa-core>=0.5.0",
     *dask_deps,
-    *ray_deps,
+    # *ray_deps,
 ]
 
 setup(name='deisa',
@@ -37,7 +37,7 @@ setup(name='deisa',
           'Bug Reports': 'https://github.com/deisa-project/deisa/issues',
           'Source': 'https://github.com/deisa-project/deisa',
       },
-      author='Benoît Martin',
+      author='Benoit Martin',
       author_email='bmartin@cea.fr',
       python_requires='>=3.8',
       keywords='deisa in-situ',
@@ -46,6 +46,7 @@ setup(name='deisa',
           "dask": dask_deps,
           "ray": ray_deps,
           "test": test_deps,
+          "mpi": ["mpi4py"]
       },
       classifiers=[
           "Programming Language :: Python :: 3.8",

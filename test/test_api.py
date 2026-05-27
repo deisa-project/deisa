@@ -15,24 +15,22 @@ module_name = {
 def test_deisa_api(request, env_setup):
     client, cluster = request.getfixturevalue(env_setup)
     module = importlib.import_module(module_name[env_setup])
-    deisa: IDeisa = module.Deisa(get_connection_info=lambda: client, wait_for_go=False)
-
-    assert hasattr(deisa, 'close') and callable(deisa.close)
-    assert hasattr(deisa, 'get_array') and callable(deisa.get_array)
-    assert hasattr(deisa, 'register_sliding_window_callback') and callable(deisa.register_sliding_window_callback)
-    assert hasattr(deisa, 'unregister_sliding_window_callback') and callable(deisa.unregister_sliding_window_callback)
-    assert hasattr(deisa, "set") and callable(deisa.set)
-    assert hasattr(deisa, "delete") and callable(deisa.delete)
+    deisa: IDeisa = module.Deisa(wait_for_go=False)
+    assert isinstance(deisa, IDeisa)
 
 
 @pytest.mark.parametrize("env_setup", [dask_env.__name__, ray_env.__name__])
 def test_bridge_api(request, env_setup):
+    from mpi4py import MPI
     client, cluster = request.getfixturevalue(env_setup)
     module = importlib.import_module(module_name[env_setup])
-    bridge: IBridge = module.Bridge(id=0,
-                                    arrays_metadata={},
-                                    system_metadata={'connection': client, 'nb_bridges': 1},
+    bridge: IBridge = module.Bridge(MPI.COMM_WORLD,
+                                    arrays_metadata={
+                                        'temperature': {
+                                            'global_shape': (8, 8),
+                                            'chunk_shape': (8, 8),
+                                            'chunk_position': (0, 0)
+                                        },
+                                    },
                                     wait_for_go=False)
-
-    assert hasattr(bridge, 'send') and callable(bridge.send)
-    assert hasattr(bridge, 'get') and callable(bridge.get)
+    assert isinstance(bridge, IBridge)
